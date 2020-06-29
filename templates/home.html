@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% for training in trainings %}
+        <h1>{{ training.type }}</h1>
+        <p>By {{ training.user }} on {{ training.date }}</p>
+        <p>Distance: {{ training.distance }}</p>
+        <p>Duration: {{ training.duration }}</p>
+    {% endfor %}
+{% endblock content %}
