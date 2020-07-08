@@ -1,2 +1,7 @@
 venv
 .idea
+.DS_Store
+__pycache__/
+swimmate/__pycache__/
+swimmate/site.db
+swimmate_env/

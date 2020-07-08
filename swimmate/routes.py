@@ -1,9 +1,7 @@
-from flask import Flask, render_template, url_for
-from forms import RegistrationForm, LoginForm
-
-app = Flask(__name__)
-
-app.config["SECRET_KEY"] = "c4d269c24985531076eb5020c1c221a5ex"
+from flask import render_template, url_for, flash, redirect
+from swimmate import app
+from swimmate.forms import LoginForm, RegistrationForm
+from swimmate.models import User, Training
 
 records = [
     {
@@ -41,17 +39,23 @@ def trainings():
     return render_template("trainings.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["POST", "GET"])
 def register():
     form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for("home"))
     return render_template("register.html", title="Register", form=form)
 
 
-@app.route("/login")
+@app.route("/login", methods=["POST", "GET"])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == "admin@blog.com" and form.password.data == "password":
+            flash("You have been logged in!", "success")
+            return url_for("home")
+        else:
+            flash("Login unsuccessful. Please check username and password!", "danger")
     return render_template("login.html", title="Login", form=form)
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
