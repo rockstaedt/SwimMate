@@ -3,6 +3,10 @@ body{
     color: whitesmoke;
 }
 
+main{
+    margin: 30px;
+}
+
 .bg-*{
     background-color: steelblue;
 }

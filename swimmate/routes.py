@@ -3,32 +3,13 @@ from swimmate import app, db, bycrypt
 from swimmate.forms import LoginForm, RegistrationForm
 from swimmate.models import User, Training
 from flask_login import login_user, current_user, logout_user, login_required
-
-# example of records
-records = [
-    {
-        "user": "Eric Rockstädt",
-        "type": "Swimming",
-        "date": "28.06.2020",
-        "time": "15:00",
-        "duration": 60,
-        "distance": 2.5
-    },
-    {
-        "user": "Eric Rockstädt",
-        "type": "Swimming",
-        "date": "25.06.2020",
-        "time": "14:00",
-        "duration": 60,
-        "distance": 2
-    }
-]
+from datetime import datetime
 
 
 @app.route('/')
 @app.route("/home")
 def home():
-    return render_template("home.html", records=records)
+    return render_template("home.html")
 
 
 @app.route("/about")
@@ -39,6 +20,19 @@ def about():
 @app.route("/trainings")
 def trainings():
     return render_template("trainings.html")
+
+
+@app.route("/save_training", methods=["POST", "GET"])
+def save_training():
+    date = datetime.strptime(request.form["date"], "%Y-%m-%d")
+    training = Training(date_training=date,
+                        duration_training=2,
+                        distance_training=request.form["distance"],
+                        user_id=1)
+    db.session.add(training)
+    db.session.commit()
+    flash("Training saved", "success")
+    return redirect(url_for("trainings"))
 
 
 @app.route("/register", methods=["POST", "GET"])
